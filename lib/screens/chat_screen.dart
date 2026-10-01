@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:chatbotapp/apis/api_service.dart';
+import 'package:chatbotapp/providers/ai_config_provider.dart';
 import 'package:chatbotapp/providers/chat_provider.dart';
 import 'package:chatbotapp/providers/settings_provider.dart';
 import 'package:chatbotapp/providers/user_profile_provider.dart';
 import 'package:chatbotapp/providers/voice_input_provider.dart';
+import 'package:chatbotapp/screens/ai_settings_screen.dart';
 import 'package:chatbotapp/screens/chat_history_screen.dart';
 import 'package:chatbotapp/screens/settings_screen.dart';
 import 'package:chatbotapp/utilities/animated_dialog.dart';
@@ -140,10 +141,6 @@ class _ChatScreenState extends State<ChatScreen> {
     _refreshJumpToLatestButton();
   }
 
-  String _modelLabel(String modelType) {
-    return modelType.contains('flash') ? 'Flash' : 'Vision';
-  }
-
   Future<void> _startNewChat(ChatProvider chatProvider) async {
     if (!chatProvider.hasMessages) {
       await chatProvider.prepareChatRoom(isNewChat: true, chatID: '');
@@ -202,6 +199,7 @@ class _ChatScreenState extends State<ChatScreen> {
           settingsProvider: settingsProvider,
         );
         final userName = context.watch<UserProfileProvider>().firstName;
+        final aiConfigProvider = context.watch<AiConfigProvider>();
         final showJumpButton = chatProvider.hasMessages && _showJumpToLatest;
         final motionDuration =
             settingsProvider.reduceMotion ? Duration.zero : AppMotion.regular;
@@ -230,7 +228,7 @@ class _ChatScreenState extends State<ChatScreen> {
             children: [
               ChatHeader(
                 userName: userName,
-                modelLabel: _modelLabel(chatProvider.modelType),
+                modelLabel: aiConfigProvider.model,
                 canStartNewChat: chatProvider.hasMessages,
                 onOpenHistory: () => _openPage(const ChatHistoryScreen()),
                 onOpenSettings: () => _openPage(const SettingsScreen()),
@@ -257,10 +255,14 @@ class _ChatScreenState extends State<ChatScreen> {
                                   bottom: contentBottomPadding,
                                 ),
                                 child: ChatEmptyState(
-                                  apiConfigured: ApiService.isConfigured,
+                                  apiConfigured:
+                                      aiConfigProvider.isConfigured,
                                   showStarterPrompts:
                                       settingsProvider.showStarterPrompts,
                                   onSuggestionTap: _sendSuggestion,
+                                  onAddApiKey: () => _openPage(
+                                    const AiSettingsScreen(),
+                                  ),
                                 ),
                               ),
                       ),

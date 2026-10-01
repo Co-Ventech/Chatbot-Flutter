@@ -1,4 +1,10 @@
+import 'package:chatbotapp/apis/ai_types.dart';
+
 String formatChatError(Object error) {
+  if (error is AiException) {
+    return error.message;
+  }
+
   if (error case StateError(:final message)) {
     return message;
   }
@@ -25,6 +31,10 @@ String formatChatError(Object error) {
 }
 
 bool shouldRetryRequest(Object error) {
+  if (error is AiException) {
+    return error.retryable;
+  }
+
   final text = error.toString().toLowerCase();
 
   if (text.contains('api key') ||

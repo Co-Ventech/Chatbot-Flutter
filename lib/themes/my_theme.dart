@@ -98,7 +98,14 @@ ThemeData _buildTheme(ColorScheme colorScheme) {
         fontWeight: FontWeight.w600,
       ),
       bodyLarge: textTheme.bodyLarge?.copyWith(
-        height: 1.35,
+        height: 1.38,
+      ),
+      bodyMedium: textTheme.bodyMedium?.copyWith(
+        height: 1.42,
+      ),
+      labelLarge: textTheme.labelLarge?.copyWith(
+        fontWeight: FontWeight.w600,
+        letterSpacing: 0.1,
       ),
     ),
     appBarTheme: AppBarTheme(
@@ -118,7 +125,7 @@ ThemeData _buildTheme(ColorScheme colorScheme) {
       elevation: 0,
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(24),
         side: BorderSide(
           color: colorScheme.outlineVariant.withValues(alpha: 0.7),
         ),
@@ -179,16 +186,54 @@ ThemeData _buildTheme(ColorScheme colorScheme) {
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
-        minimumSize: const Size(0, 44),
+        minimumSize: const Size(0, 46),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        textStyle: textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w700),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        minimumSize: const Size(0, 44),
+        minimumSize: const Size(0, 46),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        textStyle: textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w600),
         side: BorderSide(color: colorScheme.outlineVariant),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
+    ),
+    dialogTheme: DialogThemeData(
+      backgroundColor: colorScheme.surfaceContainerLow,
+      surfaceTintColor: Colors.transparent,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+    ),
+    bottomSheetTheme: BottomSheetThemeData(
+      backgroundColor: colorScheme.surfaceContainerLow,
+      modalBackgroundColor: colorScheme.surfaceContainerLow,
+      surfaceTintColor: Colors.transparent,
+      showDragHandle: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      ),
+    ),
+    listTileTheme: ListTileThemeData(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+      iconColor: colorScheme.onSurfaceVariant,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+    ),
+    progressIndicatorTheme: ProgressIndicatorThemeData(
+      color: colorScheme.primary,
+    ),
+    textSelectionTheme: TextSelectionThemeData(
+      cursorColor: colorScheme.primary,
+      selectionColor: colorScheme.primary.withValues(alpha: 0.22),
+      selectionHandleColor: colorScheme.primary,
+    ),
+    tooltipTheme: TooltipThemeData(
+      decoration: BoxDecoration(
+        color: colorScheme.inverseSurface,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      textStyle: TextStyle(color: colorScheme.onInverseSurface, fontSize: 12),
     ),
     switchTheme: SwitchThemeData(
       trackOutlineColor: WidgetStatePropertyAll(

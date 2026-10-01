@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:chatbotapp/providers/ai_config_provider.dart';
 import 'package:chatbotapp/providers/chat_provider.dart';
 import 'package:chatbotapp/providers/settings_provider.dart';
 import 'package:chatbotapp/providers/user_profile_provider.dart';
@@ -16,6 +17,7 @@ void main() {
           ChangeNotifierProvider(create: (_) => SettingsProvider()),
           ChangeNotifierProvider(create: (_) => UserProfileProvider()),
           ChangeNotifierProvider(create: (_) => VoiceInputProvider()),
+          ChangeNotifierProvider(create: (_) => AiConfigProvider()),
         ],
         child: MaterialApp(
           home: const ChatScreen(),

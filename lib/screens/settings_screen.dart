@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:chatbotapp/providers/ai_config_provider.dart';
 import 'package:chatbotapp/providers/chat_provider.dart';
 import 'package:chatbotapp/providers/settings_provider.dart';
 import 'package:chatbotapp/providers/user_profile_provider.dart';
@@ -15,6 +16,7 @@ import 'package:chatbotapp/widgets/build_display_image.dart';
 import 'package:chatbotapp/widgets/profile_avatar.dart';
 import 'package:chatbotapp/widgets/settings_tile.dart';
 import 'package:chatbotapp/widgets/theme_mode_selector.dart';
+import 'package:chatbotapp/screens/ai_settings_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -117,6 +119,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     final settingsProvider = context.watch<SettingsProvider>();
     final userProfile = context.watch<UserProfileProvider>();
+    final aiConfigProvider = context.watch<AiConfigProvider>();
     final colorScheme = Theme.of(context).colorScheme;
     final motionDuration =
         settingsProvider.reduceMotion ? Duration.zero : AppMotion.regular;
@@ -244,7 +247,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 22),
+            const SizedBox(height: 18),
+            const _SectionLabel(title: 'AI'),
+            const SizedBox(height: 10),
+            Card(
+              child: _ActionTile(
+                icon: CupertinoIcons.lock_fill,
+                title: 'API key & model',
+                subtitle: aiConfigProvider.isConfigured
+                    ? '${aiConfigProvider.model} · ${aiConfigProvider.source}'
+                    : 'Not connected',
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => const AiSettingsScreen(),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 18),
             const _SectionLabel(title: 'Appearance'),
             const SizedBox(height: 10),
             Card(

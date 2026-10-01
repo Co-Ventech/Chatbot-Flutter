@@ -9,8 +9,10 @@ class Constants {
   static const String chatMessagesBox = 'chat_messages_';
 
   static const String geminiDB = 'gemini.db';
-  static const String geminiTextModel = 'gemini-2.5-flash';
-  static const String geminiVisionModel = 'gemini-2.5-flash';
+
+  /// Local (on-device) AI configuration — never committed or bundled.
+  static const String apiKeyBox = 'app_config';
+
   static const String assistantSystemInstruction =
       'You are AI Chatbot, a helpful assistant. Give clear, accurate, and concise answers. '
       'Use short sections or bullets when it improves readability. '

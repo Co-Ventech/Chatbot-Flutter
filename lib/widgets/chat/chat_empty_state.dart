@@ -8,78 +8,111 @@ class ChatEmptyState extends StatelessWidget {
     required this.apiConfigured,
     required this.showStarterPrompts,
     required this.onSuggestionTap,
+    required this.onAddApiKey,
   });
 
   final bool apiConfigured;
   final bool showStarterPrompts;
   final ValueChanged<String> onSuggestionTap;
+  final VoidCallback onAddApiKey;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const SizedBox(height: 36),
+          const _HeroBadge(),
+          const SizedBox(height: 22),
+          Text(
+            'How can I help?',
+            style: theme.textTheme.headlineSmall,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 28),
+            child: Text(
+              apiConfigured
+                  ? 'Ask anything, or attach an image to analyze.'
+                  : 'Connect your Gemini API key to get started.',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          if (showStarterPrompts && apiConfigured) ...[
+            const SizedBox(height: 24),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 8,
+                runSpacing: 8,
+                children: Constants.starterPrompts
+                    .map(
+                      (prompt) => ActionChip(
+                        avatar: const Icon(CupertinoIcons.sparkles, size: 14),
+                        label: Text(prompt),
+                        onPressed: () => onSuggestionTap(prompt),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+          ],
+          if (!apiConfigured) ...[
+            const SizedBox(height: 22),
+            FilledButton.icon(
+              onPressed: onAddApiKey,
+              icon: const Icon(CupertinoIcons.lock_fill, size: 18),
+              label: const Text('Add API key'),
+            ),
+            const SizedBox(height: 4),
+            TextButton(
+              onPressed: onAddApiKey,
+              child: const Text('Choose a model'),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _HeroBadge extends StatelessWidget {
+  const _HeroBadge();
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const SizedBox(height: 44),
-          Text(
-            'How can I help?',
-            style: Theme.of(context).textTheme.headlineSmall,
-            textAlign: TextAlign.center,
+    return Container(
+      width: 78,
+      height: 78,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [colorScheme.primary, colorScheme.secondary],
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: colorScheme.primary.withValues(alpha: 0.26),
+            blurRadius: 28,
+            offset: const Offset(0, 14),
           ),
-          const SizedBox(height: 8),
-          Text(
-            'Start with a prompt below',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                ),
-            textAlign: TextAlign.center,
-          ),
-          if (showStarterPrompts) ...[
-            const SizedBox(height: 20),
-            Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 8,
-              runSpacing: 8,
-              children: Constants.starterPrompts
-                  .map(
-                    (prompt) => ActionChip(
-                      avatar: const Icon(CupertinoIcons.sparkles, size: 14),
-                      label: Text(prompt),
-                      onPressed: () => onSuggestionTap(prompt),
-                    ),
-                  )
-                  .toList(),
-            ),
-          ],
-          if (!apiConfigured) ...[
-            const SizedBox(height: 18),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-              decoration: BoxDecoration(
-                color: colorScheme.secondaryContainer,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    CupertinoIcons.exclamationmark_triangle,
-                    size: 16,
-                    color: colorScheme.onSecondaryContainer,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    'Set API_KEY to start',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: colorScheme.onSecondaryContainer,
-                        ),
-                  ),
-                ],
-              ),
-            ),
-          ],
         ],
+      ),
+      child: Icon(
+        CupertinoIcons.sparkles,
+        color: colorScheme.onPrimary,
+        size: 32,
       ),
     );
   }
